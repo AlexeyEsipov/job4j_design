@@ -14,11 +14,11 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="chapter_001" target="1.5" />
-      <module name="chapter_002" target="1.5" />
-      <module name="chapter_003" target="1.5" />
-      <module name="chapter_004" target="1.5" />
-      <module name="chapter_005" target="1.5" />
+      <module name="chapter_001" target="14" />
+      <module name="chapter_002" target="14" />
+      <module name="chapter_003" target="14" />
+      <module name="chapter_004" target="14" />
+      <module name="chapter_005" target="14" />
       <module name="job4j_design" target="14" />
     </bytecodeTargetLevel>
   </component>
