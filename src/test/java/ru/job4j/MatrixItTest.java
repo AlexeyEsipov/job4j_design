@@ -1,8 +1,10 @@
-package ru.job4j.it;
+package ru.job4j;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
 import org.junit.Test;
+import ru.job4j.it.MatrixIt;
+
 import java.util.NoSuchElementException;
 
 public class MatrixItTest  {
