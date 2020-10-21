@@ -16,9 +16,12 @@ public class SimpleArray<T> implements Iterable<T> {
         return new ContIterator<>();
     }
 
-    public void add(T model) {
-        if (model != null) {
-            container[indexFree++] = model;
+    public void add(T model) {  /// причесать
+        int notNull = indexFree;
+        container[indexFree++] = model;
+        while (model != null && notNull > 0 && container[notNull - 1] == null) {
+            container[notNull - 1] = model;
+            container[notNull--] = null;
         }
     }
 
@@ -41,7 +44,7 @@ public class SimpleArray<T> implements Iterable<T> {
         indexFree--;
     }
 
-    private class ContIterator<R> implements Iterator<R> {
+    private class ContIterator<T> implements Iterator<T> {
         private int nextElement = 0;
 
         @Override
@@ -50,11 +53,11 @@ public class SimpleArray<T> implements Iterable<T> {
         }
 
         @Override
-        public R next() {
+        public T next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            return  (R) container[nextElement++];
+            return  (T) container[nextElement++];
         }
     }
 }
