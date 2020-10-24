@@ -16,13 +16,8 @@ public class SimpleArray<T> implements Iterable<T> {
         return new ContIterator<>();
     }
 
-    public void add(T model) {  /// причесать
-        int notNull = indexFree;
+    public void add(T model) {
         container[indexFree++] = model;
-        while (model != null && notNull > 0 && container[notNull - 1] == null) {
-            container[notNull - 1] = model;
-            container[notNull--] = null;
-        }
     }
 
     public void set(int index, T model) {

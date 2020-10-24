@@ -20,22 +20,6 @@ public class SimpleArrayTest {
     }
 
     @Test
-    public void whenAddTwoNullElementThenFirstElementNotNull() {
-        SimpleArray<String> sas = new SimpleArray<>(10);
-        sas.add(null);
-        sas.add(null);
-        sas.add("third");
-        assertThat(sas.get(0), is("third"));
-        assertNull(sas.get(1));
-        sas.add(null);
-        sas.add(null);
-        sas.add("four");
-        assertThat(sas.get(0), is("third"));
-        assertThat(sas.get(1), is("four"));
-        assertNull(sas.get(2));
-    }
-
-    @Test
     public void whenSetElement() {
         SimpleArray<String> sas = new SimpleArray<>(10);
         sas.add("first");
