@@ -35,7 +35,7 @@ public class SimpleArray<T> implements Iterable<T> {
     }
 
     private void grow() {
-        container = Arrays.copyOf(container, container.length + 1);
+        container = Arrays.copyOf(container, container.length * 2);
         modCount++;
     }
 
@@ -62,5 +62,4 @@ public class SimpleArray<T> implements Iterable<T> {
             return  (T) container[nextElement++];
         }
     }
-
 }
