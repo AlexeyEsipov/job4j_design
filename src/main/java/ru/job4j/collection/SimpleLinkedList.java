@@ -9,7 +9,7 @@ public class SimpleLinkedList<E> implements Iterable<E> {
     private Node<E> first;
     private Node<E> last;
 
-    void add(E e) {
+    public void add(E e) {
         final Node<E> l = last;
         final Node<E> newNode = new Node<>(l, e, null);
         last = newNode;
@@ -22,7 +22,7 @@ public class SimpleLinkedList<E> implements Iterable<E> {
         modCount++;
     }
 
-    E get(int index) {
+    public E get(int index) {
         Objects.checkIndex(index, size);
         Node<E> rsl = first;
         for (int i = 0; i < index; i++) {
