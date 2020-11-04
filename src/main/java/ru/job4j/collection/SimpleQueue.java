@@ -12,7 +12,6 @@ public class SimpleQueue<T> {
         if (countIn == 0 && countOut == 0) {
             throw new NoSuchElementException();
         }
-        T result = null;
         if (countOut == 0) {
            while (countIn > 0) {
                out.push(in.pop());
@@ -20,11 +19,8 @@ public class SimpleQueue<T> {
                countIn--;
            }
         }
-        if (countOut > 0) {
-            result = out.pop();
-            countOut--;
-        }
-        return result;
+        countOut--;
+        return out.pop();
     }
 
     public void push(T value) {
