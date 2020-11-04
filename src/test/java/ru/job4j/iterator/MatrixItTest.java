@@ -1,9 +1,9 @@
-package ru.job4j;
+package ru.job4j.iterator;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
 import org.junit.Test;
-import ru.job4j.it.MatrixIt;
+import ru.job4j.iterator.MatrixIt;
 
 import java.util.NoSuchElementException;
 
