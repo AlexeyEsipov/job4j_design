@@ -14,7 +14,6 @@ public class User {
         this.birthday = birthday;
     }
 
-
     public User(String name, Calendar birthday) {
         this (name, 0, birthday);
     }
@@ -24,25 +23,25 @@ public class User {
         return "User{"
                 + "name='" + name + '\''
                 + ", children=" + children
-                + ", birthday=" + birthday + '}';
+                + ", birthday=" + birthday.getTime() + '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        User user = (User) o;
-        return children == user.children
-               && name.equals(user.name)
-               && birthday.equals(user.birthday);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, children, birthday);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (o == null || getClass() != o.getClass()) {
+//            return false;
+//        }
+//        User user = (User) o;
+//        return children == user.children
+//               && name.equals(user.name)
+//               && birthday.equals(user.birthday);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(name, children, birthday);
+//    }
 }
