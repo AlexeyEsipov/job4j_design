@@ -14,6 +14,7 @@ public class User {
         this.birthday = birthday;
     }
 
+
     public User(String name, Calendar birthday) {
         this (name, 0, birthday);
     }
