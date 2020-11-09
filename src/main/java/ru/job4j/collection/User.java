@@ -40,8 +40,8 @@ public class User {
                && birthday.equals(user.birthday);
     }
 
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(name, children, birthday);
-//    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, children, birthday);
+    }
 }
