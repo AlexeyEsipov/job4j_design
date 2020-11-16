@@ -13,10 +13,6 @@ public class SimpleSet<T> implements Iterable<T> {
     }
 
     private boolean contains(T volume) {
-        Iterator<T> itSimpleArray = container.iterator();
-        if (!itSimpleArray.hasNext()) {
-            return false;
-        }
         for (T el: container) {
             if (Objects.equals(el, volume)) {
                 return true;
