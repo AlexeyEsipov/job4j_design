@@ -6,6 +6,7 @@ public class SimpleHashMap<K,V> {
     private Object[] container;
     private int load = 10;
     private int indexFree;
+    private final double LOAD_FACTOR = 0.7;
 
     public SimpleHashMap() {
         this.container = new Object[10];
@@ -13,10 +14,10 @@ public class SimpleHashMap<K,V> {
     }
 
     public boolean insert(K key, V value) {
-        if (getIndex(key) != -1) {
+        if (container[hash(key.hashCode())] != null) {
             return false;
         }
-        if (indexFree > load * 0.7) {
+        if (indexFree > load * LOAD_FACTOR) {
             grow();
         }
         container[hash(key.hashCode())] = new Box(key, value);
@@ -29,8 +30,7 @@ public class SimpleHashMap<K,V> {
         if (index == -1) {
             return null;
         }
-        Box el = (Box) container[index];
-        return el.value;
+        return ((Box) container[index]).value;
     }
 
     public boolean delete(K key) {
@@ -55,15 +55,13 @@ public class SimpleHashMap<K,V> {
     }
 
     private int getIndex(K key) {
-        int code = key.hashCode();
-        for (int i = 0; i < container.length; i++) {
-            if (container[i] == null) {
-                continue;
-            }
-            Box boxEl = (Box)container[i];
-            if (boxEl.keyHashCode == code && boxEl.key.equals(key)) {
-                return i;
-            }
+        int index = hash(key.hashCode());
+        if (container[index] == null) {
+            return -1;
+        }
+        Box boxEl = (Box)container[index];
+        if (boxEl.keyHashCode == key.hashCode() && boxEl.key.equals(key)) {
+            return index;
         }
         return -1;
     }
@@ -71,10 +69,6 @@ public class SimpleHashMap<K,V> {
     private int hash(int code) {
         return code % container.length;
     }
-
-//    private Iterator<Box> iterator() {
-//        return new MapIterator<>();
-//    }
 
     private class MapIterator<Box> implements Iterator{
         int indexNext = 0;
