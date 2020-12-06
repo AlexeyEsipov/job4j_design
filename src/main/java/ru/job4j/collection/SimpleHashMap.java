@@ -2,11 +2,11 @@ package ru.job4j.collection;
 
 import java.util.Iterator;
 
-public class SimpleHashMap<K,V> {
+public class SimpleHashMap<K, V> {
     private Object[] container;
     private int load = 10;
     private int indexFree;
-    private final double LOAD_FACTOR = 0.7;
+    private final double loadFactor = 0.7;
 
     public SimpleHashMap() {
         this.container = new Object[10];
@@ -17,7 +17,7 @@ public class SimpleHashMap<K,V> {
         if (container[hash(key.hashCode())] != null) {
             return false;
         }
-        if (indexFree > load * LOAD_FACTOR) {
+        if (indexFree > load * loadFactor) {
             grow();
         }
         container[hash(key.hashCode())] = new Box(key, value);
@@ -44,9 +44,10 @@ public class SimpleHashMap<K,V> {
     }
 
     private class Box {
-        K key;
-        int keyHashCode;
-        V value;
+        private K key;
+        private int keyHashCode;
+        private V value;
+
         Box(K key, V value) {
             this.key = key;
             this.keyHashCode = key.hashCode();
@@ -59,7 +60,7 @@ public class SimpleHashMap<K,V> {
         if (container[index] == null) {
             return -1;
         }
-        Box boxEl = (Box)container[index];
+        Box boxEl = (Box) container[index];
         if (boxEl.keyHashCode == key.hashCode() && boxEl.key.equals(key)) {
             return index;
         }
@@ -70,8 +71,8 @@ public class SimpleHashMap<K,V> {
         return code % container.length;
     }
 
-    private class MapIterator<Box> implements Iterator{
-        int indexNext = 0;
+    private class MapIterator<Box> implements Iterator {
+        private int indexNext = 0;
 
         @Override
         public boolean hasNext() {
@@ -86,13 +87,13 @@ public class SimpleHashMap<K,V> {
 
         @Override
         public Box next() {
-            return (Box)container[indexNext];
+            return (Box) container[indexNext];
         }
     }
 
-    private void grow(){
+    private void grow() {
         Object[] newContainer = new Object[load * 2];
-        Iterator<Box> iterator = new MapIterator<>();
+        Iterator<Box> iterator = new MapIterator<Box>();
         while (iterator.hasNext()) {
             Box el = iterator.next();
             int index = el.keyHashCode % newContainer.length;
