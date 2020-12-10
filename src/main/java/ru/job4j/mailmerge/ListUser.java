@@ -2,7 +2,7 @@ package ru.job4j.mailmerge;
 
 import java.util.*;
 
-public class SetUser  {
+public class ListUser {
 
     private ArrayList<User> userSet = new ArrayList<>();
 
