@@ -29,7 +29,6 @@ public class Analysis {
             }
         }
         result.setChanged(changed);
-
         return result;
     }
 

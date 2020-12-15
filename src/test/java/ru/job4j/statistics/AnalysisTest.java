@@ -8,7 +8,6 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 public class AnalysisTest {
-
     @Test
     public void whenAddDelChangeThenAddDelChange() {
         Analysis analysis = new Analysis();
