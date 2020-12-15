@@ -24,6 +24,5 @@ public class ResultFile {
     } catch (Exception e) {
         e.printStackTrace();
     }
-
-}
+    }
 }
