@@ -1,45 +1,45 @@
 package ru.job4j.statistics;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Analysis {
     public Info diff(List<User> previous, List<User> current) {
         int changed = 0;
-        Info result = new Info();
-        Map<Integer, String> currentMap;
+        int added;
+        int deleted = 0;
+        int exist = 0;
+        HashMap<Integer, String> previousMap;
+        HashMap<Integer, String> currentMap;
         currentMap = convertListToMap(current);
-        List<User> listTmp = new ArrayList<>(current);
-        listTmp.removeAll(previous);
-        result.setAdded(listTmp.size());
-
-        listTmp.clear();
-        listTmp.addAll(previous);
-        listTmp.removeAll(current);
-        result.setDeleted(listTmp.size());
-
-        listTmp.clear();
-        listTmp.addAll(previous);
-        listTmp.retainAll(current);
-        for (User user : listTmp) {
-            var id = user.getId();
-            var name = user.getName();
-            if (!name.equals(currentMap.get(id))) {
-                changed++;
+        previousMap = convertListToMap(previous);
+        for (int id: previousMap.keySet()) {
+            if (!currentMap.containsKey(id)) { //нет ключа, элемент был удален
+                deleted++;
+                continue;
+            }
+            if (currentMap.containsKey(id)) { //ключ есть
+                if (currentMap.get(id).equals(previousMap.get(id))) { //элемент не изменен
+                    exist++;
+                } else { //элемент был изменен
+                    changed++;
+                }
             }
         }
-        result.setChanged(changed);
+        added = currentMap.size() - exist - changed;
+        return new Info(added, changed, deleted);
+    }
+
+    private HashMap<Integer, String> convertListToMap(List<User> listUser) {
+       HashMap<Integer, String> result = new HashMap<>();
+        for (User user: listUser) {
+            result.put(user.getId(), user.getName());
+        }
         return result;
     }
 
-    private Map<Integer, String> convertListToMap(List<User> listUser) {
-       return listUser.stream()
-               .collect(Collectors.toMap(User::getId, User::getName));
-    }
-
     public static class User {
-        private int id;
-        private String name;
+        private final int id;
+        private final String name;
 
         public User(int id, String name) {
             this.id = id;
@@ -53,52 +53,29 @@ public class Analysis {
         public String getName() {
             return name;
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (!(o instanceof User)) {
-                return false;
-            }
-            User user = (User) o;
-            return getId() == user.getId();
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(getId());
-        }
     }
 
     public static class Info {
-        private int added;
-        private int changed;
-        private int deleted;
+        private final int added;
+        private final int changed;
+        private final int deleted;
+
+        public Info(int added, int changed, int deleted) {
+            this.added = added;
+            this.changed = changed;
+            this.deleted = deleted;
+        }
 
         public int getAdded() {
             return added;
-        }
-
-        public void setAdded(int added) {
-            this.added = added;
         }
 
         public int getChanged() {
             return changed;
         }
 
-        public void setChanged(int changed) {
-            this.changed = changed;
-        }
-
         public int getDeleted() {
             return deleted;
-        }
-
-        public void setDeleted(int deleted) {
-            this.deleted = deleted;
         }
     }
 }
