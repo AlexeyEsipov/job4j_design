@@ -2,6 +2,7 @@ package ru.job4j.io;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Config {
     private final String path;
@@ -13,24 +14,13 @@ public class Config {
 
     public void load() {
         try (BufferedReader in = new BufferedReader(new FileReader(this.path))) {
-            List<String> lines = new ArrayList<>();
-            in.lines().forEach(lines::add);
-            String[] words;
-            for (String line : lines) {
-                if (line.isEmpty()) {
-                    continue;
-                }
-                if (line.startsWith("//") || line.startsWith("##")) {
-                    continue;
-                }
-                if (line.startsWith("/*") || line.startsWith(" *")) {
-                    continue;
-                }
-                if (line.contains("=")) {
-                    words = line.split("=");
-                    values.put(words[0], words[1]);
-                }
-            }
+            values.putAll(in.lines()
+                    .filter(s -> !s.startsWith("#") && !s.isEmpty() && s.contains("="))
+                    .map(s -> s.split("="))
+                    .collect(Collectors.toMap(
+                            s -> s[0],
+                            s -> s[1]))
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }
