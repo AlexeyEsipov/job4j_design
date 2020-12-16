@@ -5,44 +5,48 @@ import java.util.List;
 
 public class Analizy {
     public void unavailable(String source, String target) {
-        try (BufferedReader in = new BufferedReader(new FileReader(source));
-             PrintWriter out = new PrintWriter(new BufferedOutputStream(
-                             new FileOutputStream(target)))) {
-            List<String> lines = new ArrayList<>();
-            in.lines().forEach(lines::add);
-            boolean workTime = false;
-            for (int i = 0; i < lines.size(); i++) {
-                String line = lines.get(i);
-                if ((i == 0) && (line.startsWith("400") || line.startsWith("500"))) {
-                    String[] w;
-                    w = line.split(" ");
-                    out.write(w[1] + ";");
-                    workTime = false;
+        List<String> lines = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        boolean workTime = false;
+        int i = 0;
+        try (BufferedReader in = new BufferedReader(new FileReader(source))) {
+            while (true) {
+            String line = in.readLine();
+                if (line == null) {
+                    break;
+                }
+                if (i == 0) {
+                    if (line.startsWith("400") || line.startsWith("500")) {
+                        sb.append(line.split(" ")[1]);
+                        sb.append(";");
+                    } else {
+                        workTime = true;
+                    }
+                    i = 1;
                     continue;
                 }
-                if ((i == 0) && (line.startsWith("200") || line.startsWith("300"))) {
+                if (workTime) {
+                    if (line.startsWith("400") || line.startsWith("500")) {
+                        workTime = false;
+                        sb.append(line.split(" ")[1]);
+                        sb.append(";");
+                    }
+                    continue;
+                }
+                if (line.startsWith("200") || line.startsWith("300")) {
                     workTime = true;
-                    continue;
+                    sb.append(line.split(" ")[1]);
+                    lines.add(sb.toString());
+                    sb = new StringBuilder();
                 }
-                if (workTime && (line.startsWith("200") || line.startsWith("300"))) {
-                    continue;
-                }
-                if (!workTime && (line.startsWith("400") || line.startsWith("500"))) {
-                    continue;
-                }
-                if (workTime && line.startsWith("400") || line.startsWith("500")) {
-                    workTime = false;
-                    String[] w;
-                    w = line.split(" ");
-                    out.write(w[1] + ";");
-                    continue;
-                }
-                if (!workTime && line.startsWith("200") || line.startsWith("300")) {
-                    workTime = true;
-                    String[] w;
-                    w = line.split(" ");
-                    out.write(w[1] + System.lineSeparator());
-                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try (PrintWriter out = new PrintWriter(new BufferedOutputStream(
+                     new FileOutputStream(target)))) {
+            for (String line : lines) {
+                out.println(line);
             }
         } catch (Exception e) {
             e.printStackTrace();
