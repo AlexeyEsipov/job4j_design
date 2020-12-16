@@ -9,16 +9,7 @@ public class LogFilter {
     public static List<String> filter(String file) {
         List<String> result = new ArrayList<>();
         try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-            List<String> lines = new ArrayList<>();
-            in.lines().forEach(lines::add);
-            String[] words;
-            for (String line : lines) {
-                words = line.split(" ");
-                String s = words[words.length - 2];
-                if (s.equals("404")) {
-                    result.add(line);
-                }
-            }
+            in.lines().filter(s -> s.contains(" 404 ")).forEach(result::add);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -27,9 +18,8 @@ public class LogFilter {
 
     public static void save(List<String> log, String file) {
         try (PrintWriter out = new PrintWriter(
-                new BufferedOutputStream(
-                        new FileOutputStream(file)
-                ))) {
+                        new BufferedOutputStream(
+                        new FileOutputStream(file)))) {
             for (String line: log) {
                 out.write(line + System.lineSeparator());
             }
@@ -39,7 +29,7 @@ public class LogFilter {
     }
 
     public static void main(String[] args) {
-        List<String> log = filter("log.txt");
-        save(log, "404.txt");
+        List<String> log = filter("./data/log.txt");
+        save(log, "./data/404.txt");
     }
 }
