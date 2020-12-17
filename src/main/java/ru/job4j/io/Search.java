@@ -10,7 +10,7 @@ import static java.nio.file.FileVisitResult.CONTINUE;
 
 public class Search {
     public static void main(String[] args) throws IOException {
-        Path start = Paths.get("C:/projects/job4j_design");
+        Path start = Paths.get(".");
         System.out.println(start.toString());
         search(start, "txt").forEach(System.out::println);
     }
@@ -33,8 +33,8 @@ public class Search {
 
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-            if (predicate.test(path)) {
-                pathList.add(path);
+            if (predicate.test(file)) {
+                pathList.add(file);
             }
             return CONTINUE;
         }
