@@ -10,19 +10,14 @@ public class Analizy {
         boolean workTime = false;
         int i = 0;
         try (BufferedReader in = new BufferedReader(new FileReader(source))) {
-            while (true) {
-            String line = in.readLine();
-                if (line == null) {
-                    break;
-                }
-                if (i == 0) {
+            for (String line = in.readLine(); line != null; line = in.readLine()) {
+                if ((i++) == 0) {
                     if (line.startsWith("400") || line.startsWith("500")) {
                         sb.append(line.split(" ")[1]);
                         sb.append(";");
                     } else {
                         workTime = true;
                     }
-                    i = 1;
                     continue;
                 }
                 if (workTime) {
@@ -31,9 +26,7 @@ public class Analizy {
                         sb.append(line.split(" ")[1]);
                         sb.append(";");
                     }
-                    continue;
-                }
-                if (line.startsWith("200") || line.startsWith("300")) {
+                } else if (line.startsWith("200") || line.startsWith("300")) {
                     workTime = true;
                     sb.append(line.split(" ")[1]);
                     lines.add(sb.toString());
@@ -58,7 +51,7 @@ public class Analizy {
         analizy.unavailable("server.log", "target.log");
         try (PrintWriter out = new PrintWriter(new FileOutputStream("unavailable.csv"))) {
             out.println("15:01:30;15:02:32");
-            out.println("15:10:30;23:12:32");
+            out.println("15:11:30;23:12:32");
         } catch (Exception e) {
             e.printStackTrace();
         }
