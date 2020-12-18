@@ -22,12 +22,12 @@ public class AnalizyTest {
         File target = folder.newFile("target.txt");
         try (PrintWriter out = new PrintWriter(new BufferedOutputStream(
                      new FileOutputStream(source)))) {
-            out.write("200 10:56:01" + System.lineSeparator());
-            out.write("500 10:57:01" + System.lineSeparator());
-            out.write("400 10:58:01" + System.lineSeparator());
-            out.write("200 10:59:01" + System.lineSeparator());
-            out.write("500 11:01:02" + System.lineSeparator());
-            out.write("200 11:02:02" + System.lineSeparator());
+            out.println("200 10:56:01");
+            out.println("500 10:57:01");
+            out.println("400 10:58:01");
+            out.println("200 10:59:01");
+            out.println("500 11:01:02");
+            out.println("200 11:02:02");
         } catch (Exception e) {
             e.printStackTrace();
         }
