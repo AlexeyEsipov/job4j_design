@@ -20,8 +20,8 @@ public class ArgsName {
         for (String s: args) {
             if (s.startsWith("-") && s.contains("=")) {
                 s1 = s.substring(1);
-                sKey = s1.split("=")[0];
-                sValue = s1.split("=")[1];
+                sKey = s1.split("=", 2)[0];
+                sValue = s1.substring(sKey.length() + 1);
                 values.put(sKey, sValue);
             }
         }
