@@ -1,9 +1,17 @@
 package ru.job4j.io;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import org.apache.log4j.BasicConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class EchoServer {
-    public static void main(String[] args) throws IOException {
+    private static final Logger LOG = LoggerFactory.getLogger(UsageLog4j.class.getName());
+
+    public static void main(String[] args) {
+        BasicConfigurator.configure();
         try (ServerSocket server = new ServerSocket(9000)) {
             boolean done = true;
             while (done) {
@@ -32,6 +40,9 @@ public class EchoServer {
                     }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOG.error("Exception in log: ", e);
         }
     }
 }
