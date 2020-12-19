@@ -12,7 +12,6 @@ public class ArgZip {
     }
 
     public boolean valid() {
-        boolean result;
         String s1;
         String sKey;
         String sValue;
@@ -25,12 +24,20 @@ public class ArgZip {
             }
         }
         if (!(values.containsKey("d") && values.containsKey("e") && values.containsKey("o"))) {
-            return false;
+            exNew();
         }
         var d = values.get("d");
         var o = values.get("o");
-        result = (o.endsWith(".zip")) && (d.endsWith("\\") || d.endsWith("/"));
-        return result;
+        if (!(o.endsWith(".zip")) && (d.endsWith("\\") || d.endsWith("/"))) {
+            exNew();
+        }
+        return true;
+    }
+
+    private void exNew() {
+        throw new IllegalArgumentException("Некорректно указаны параметры. "
+                + "Укажите параметры d, e, o в виде "
+                + "-d=c:\\project\\job4j\\ -e=class -o=project.zip");
     }
 
     public String directory() {
