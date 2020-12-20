@@ -1,8 +1,10 @@
 package ru.job4j.io;
 import java.io.FileInputStream;
+import java.util.Arrays;
+
 public class ReadFile {
     public static void main(String[] args) {
-        try (FileInputStream in = new FileInputStream("input.txt")) {
+        try (FileInputStream in = new FileInputStream("./data/input.txt")) {
             StringBuilder text = new StringBuilder();
             int read;
             while ((read = in.read()) != -1) {
@@ -13,10 +15,9 @@ public class ReadFile {
             for (String line : lines) {
                 System.out.println(line);
             }
-            System.out.println(lines);
+            System.out.println(Arrays.toString(lines));
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

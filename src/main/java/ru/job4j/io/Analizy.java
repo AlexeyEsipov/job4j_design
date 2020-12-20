@@ -38,6 +38,6 @@ public class Analizy {
 
     public static void main(String[] args) {
         Analizy analizy = new Analizy();
-        analizy.unavailable("server.log", "target.log");
+        analizy.unavailable("./data/server.log", "./data/target.log");
     }
 }
