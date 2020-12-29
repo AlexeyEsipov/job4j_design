@@ -5,8 +5,7 @@ create table rules (
 
 create table role (
     id serial primary key,
-    name_role varchar(2000),
-    rule int references rules (id)
+    name_role varchar(2000)
 );
 
 create table cross_role_rules (
@@ -54,9 +53,9 @@ create table attachments (
 insert into rules (rules) VALUES ('text1');
 insert into rules (rules) VALUES ('text2');
 
-insert into role (name_role, rule) VALUES ('role1', 1);
-insert into role (name_role, rule) VALUES ('role2', 2);
-insert into role (name_role, rule) VALUES ('role3', 1);
+insert into role (name_role) VALUES ('role1');
+insert into role (name_role) VALUES ('role2');
+insert into role (name_role) VALUES ('role3');
 
 insert into cross_role_rules (role_id, rules_id) VALUES (1,1);
 insert into cross_role_rules (role_id, rules_id) VALUES (2,1);
