@@ -9,27 +9,26 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionDemo {
-    private final Properties properties = new Properties();
+    private static final Properties properties = new Properties();
 
-    private void getProp() {
+    private static void getProp() {
         try (InputStream in = Thread
                 .currentThread()
                 .getContextClassLoader()
                 .getResourceAsStream("app.properties")) {
-            this.properties.load(in);
+            properties.load(in);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        ConnectionDemo cd = new ConnectionDemo();
-        cd.getProp();
+        getProp();
         Class.forName("org.postgresql.Driver");
 
-        String url = cd.properties.getProperty("url");
-        String login = cd.properties.getProperty("login");
-        String password = cd.properties.getProperty("password");
+        String url = properties.getProperty("url");
+        String login = properties.getProperty("login");
+        String password = properties.getProperty("password");
 
         try (Connection connection = DriverManager.getConnection(url, login, password)) {
             DatabaseMetaData metaData = connection.getMetaData();
