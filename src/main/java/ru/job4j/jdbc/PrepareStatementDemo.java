@@ -24,7 +24,8 @@ public class PrepareStatementDemo {
 
     public void insert(City city) {
         try (PreparedStatement statement =
-                     connection.prepareStatement("insert into cities(name, population) values (?, ?)")) {
+                 connection.prepareStatement(
+                         "insert into cities(name, population) values (?, ?)")) {
             statement.setString(1, city.getName());
             statement.setInt(2, city.getPopulation());
             statement.execute();
@@ -41,7 +42,8 @@ public class PrepareStatementDemo {
     public boolean update(City city) {
         boolean result = false;
         try (PreparedStatement statement =
-                     connection.prepareStatement("update cities set name = ?, population = ? where id = ?")) {
+            connection.prepareStatement(
+                    "update cities set name = ?, population = ? where id = ?")) {
             statement.setString(1, city.getName());
             statement.setInt(2, city.getPopulation());
             statement.setInt(3, city.getId());
