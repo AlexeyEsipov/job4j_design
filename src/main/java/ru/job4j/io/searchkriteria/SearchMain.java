@@ -17,7 +17,7 @@ public class SearchMain {
         if (args.length == 0) {
             throw new IllegalArgumentException("Некорректные аргументы. "
                     + "Программа должна собираться в jar и запускаться через "
-                    + "java -jar SearchMain.jar -d=c:/projects -n=*.txt -t=mask -o=log.txt");
+                    + "java -jar SearchMain.jar -d=c:/projects -n=txt -t=ext -o=log.txt");
         }
         String s1;
         String sKey;
@@ -55,7 +55,7 @@ public class SearchMain {
         if (!(values.containsKey("n") && !values.get("n").isBlank())) {
             throw new IllegalArgumentException("Некорректные аргументы. "
                     + "Аргументы должны содержать -n=*.txt, где  "
-                    + "*.txt - имя файла (например, prog.js), расширение (например, *.txt), "
+                    + "*.txt - имя файла (например, prog.js), расширение (например, txt), "
                     + "либо регулярное выражение, например для расширения pdf:"
                     + " .+([.][Pp][Dd][Ff]){1}   ");
         }
