@@ -1,0 +1,18 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<person>
+    <!-- булевый тип -->
+    <sex> false </sex>
+    <!-- числовой тип -->
+    <age> 30 </age>
+    <!-- строковый тип -->
+    <name> Alex </name>
+    <!-- вложенный объект типа Contact -->
+    <contact>
+        <phone> 11-111 </phone>
+    </contact>
+    <!-- вложенный массив -->
+    <autos>
+        <auto>Ford</auto>
+        <auto>DAF</auto>
+    </autos>
+</person>
