@@ -4,16 +4,18 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.example</groupId>
-  <artifactId>newThread</artifactId>
+  <groupId>ru.job4j</groupId>
+  <artifactId>job4j_newThread</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-
-  <name>A Camel Route</name>
+  <name>job4j_newThread</name>
+  <description>A simple job4j_newThreads</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>14</maven.compiler.source>
+    <maven.compiler.target>14</maven.compiler.target>
     <log4j2-version>2.13.3</log4j2-version>
   </properties>
 
