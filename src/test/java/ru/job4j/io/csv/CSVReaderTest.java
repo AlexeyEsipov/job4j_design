@@ -44,14 +44,15 @@ public class CSVReaderTest {
 
     @Test
     public void headerProcessing() throws IOException {
-        CSVReader.validate(new String[]{"java", "-jar", "csvReader.jar",
+        CSVReader csvReader = new CSVReader();
+        csvReader.validate(new String[]{"java", "-jar", "csvReader.jar",
                 sourcePath, "-delimiter=;", targetPath, "-filter=name,age"});
-        CSVReader.init();
+        csvReader.init();
         try (BufferedReader reader = new BufferedReader(new FileReader(source))) {
-            CSVReader.headerProcessing(reader);
-            CSVReader.bodyProcessing(reader);
+            csvReader.headerProcessing(reader);
+            csvReader.bodyProcessing(reader);
         }
-        CSVReader.outReport();
+        csvReader.outReport();
         List<String> expectedList = Files.readAllLines(Path.of(expected.getAbsolutePath()));
         List<String> actualList = Files.readAllLines(Path.of(target.getAbsolutePath()));
         assertArrayEquals(expectedList.toArray(), actualList.toArray());

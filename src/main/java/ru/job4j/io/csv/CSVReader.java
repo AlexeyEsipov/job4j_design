@@ -10,20 +10,20 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class CSVReader {
-    private static Map<String, String> argsMap = new HashMap<>();
-    private static List<String> filterHeader = new ArrayList<>();
-    private static List<Integer> listColumnHeader = new ArrayList<>();
-    private static List<String> result = new ArrayList<>();
-    private static Path destination;
-    private static String delimiter;
-    private static String source;
+    private Map<String, String> argsMap = new HashMap<>();
+    private List<String> filterHeader = new ArrayList<>();
+    private List<Integer> listColumnHeader = new ArrayList<>();
+    private List<String> result = new ArrayList<>();
+    private Path destination;
+    private String delimiter;
+    private String source;
 
-    public static void validate(String[] args) {
+    public void validate(String[] args) {
         ValidateArgsScannerCSV.parseArgs(args);
         argsMap.putAll(ValidateArgsScannerCSV.createMapArgs());
     }
 
-    public static void init() {
+    public void init() {
         delimiter = argsMap.get("delimiter");
         String filterArgs = argsMap.get("filter");
         filterHeader.addAll(List.of(filterArgs.split(",")));
@@ -31,7 +31,7 @@ public class CSVReader {
         destination = Paths.get(argsMap.get("out"));
     }
 
-    public static void headerProcessing(BufferedReader reader) throws IOException {
+    public void headerProcessing(BufferedReader reader) throws IOException {
         Scanner scanner = new Scanner(reader.readLine()).useDelimiter(delimiter);
         int i = 0;
         StringBuilder resultHeader = new StringBuilder();
@@ -46,7 +46,7 @@ public class CSVReader {
         result.add(resultHeader.toString());
     }
 
-    public static void bodyProcessing(BufferedReader reader) throws IOException {
+    public void bodyProcessing(BufferedReader reader) throws IOException {
         String line;
         int index = 0;
         while ((line = reader.readLine()) != null) {
@@ -64,7 +64,7 @@ public class CSVReader {
         }
     }
 
-    public static void outReport() throws IOException {
+    public void outReport() throws IOException {
         if (Objects.equals(argsMap.get("out"), "stdout")) {
             System.out.print(result);
         } else {
@@ -73,12 +73,13 @@ public class CSVReader {
     }
 
     public static void main(String[] args) throws IOException {
-        validate(args);
-        init();
-        try (BufferedReader reader = new BufferedReader(new FileReader(source))) {
-            headerProcessing(reader);
-            bodyProcessing(reader);
+        CSVReader csvReader = new CSVReader();
+        csvReader.validate(args);
+        csvReader.init();
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvReader.source))) {
+            csvReader.headerProcessing(reader);
+            csvReader.bodyProcessing(reader);
         }
-        outReport();
+        csvReader.outReport();
     }
 }
