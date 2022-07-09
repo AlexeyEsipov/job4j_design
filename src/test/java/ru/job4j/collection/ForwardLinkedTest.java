@@ -1,70 +1,86 @@
 package ru.job4j.collection;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.junit.Test;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class ForwardLinkedTest {
+    private ForwardLinked<Integer> linked;
+
+    @Before
+    public void init() {
+        linked = new ForwardLinked<>();
+    }
+
+    @After
+    public void after() {
+        linked = null;
+    }
 
     @Test(expected = NoSuchElementException.class)
     public void whenDeleteFirst() {
-        ForwardLinked<Integer> linked = new ForwardLinked<>();
-        linked.add(1);
+        linked.addLast(1);
+        linked.addLast(2);
+        linked.deleteFirst();
         linked.deleteFirst();
         linked.iterator().next();
     }
 
     @Test(expected = NoSuchElementException.class)
     public void whenDeleteLast() {
-        ForwardLinked<Integer> linked = new ForwardLinked<>();
-        linked.add(1);
+        linked.addLast(1);
+        linked.addLast(2);
+        linked.deleteLast();
         linked.deleteLast();
         linked.iterator().next();
     }
 
     @Test(expected = NoSuchElementException.class)
     public void whenDeleteEmptyLinked() {
-        ForwardLinked<Integer> linked = new ForwardLinked<>();
         linked.deleteFirst();
+    }
+
+    @Test
+    public void whenSize0ThenReturnFalse() {
+        assertFalse(linked.revert());
     }
 
     @Test
     public void whenMultiDelete() {
-        ForwardLinked<Integer> linked = new ForwardLinked<>();
-        linked.add(1);
-        linked.add(2);
+        linked.addLast(1);
+        linked.addLast(2);
         linked.deleteFirst();
         Iterator<Integer> it = linked.iterator();
-        assertThat(it.next(), is(2));
+        assertSame(2, it.next());
     }
 
     @Test
     public void whenAddThenIterator() {
-        ForwardLinked<Integer> linked = new ForwardLinked<>();
-        linked.add(1);
-        linked.add(2);
+        linked.addLast(1);
+        linked.addLast(2);
         Iterator<Integer> it = linked.iterator();
-        assertThat(it.next(), is(1));
-        assertThat(it.next(), is(2));
+        assertSame(1, it.next());
+        assertSame(2, it.next());
     }
 
     @Test
     public void whenAddAndRevertThenIterator() {
-        ForwardLinked<Integer> linked = new ForwardLinked<>();
-        linked.add(1);
-        linked.add(2);
-        linked.add(3);
-        linked.add(4);
-        linked.add(5);
-        linked.revert();
+        linked.addLast(1);
+        linked.addLast(2);
+        linked.addLast(3);
+        linked.addLast(4);
+        linked.addLast(5);
+        assertTrue(linked.revert());
         Iterator<Integer> it = linked.iterator();
-        assertThat(it.next(), is(5));
-        assertThat(it.next(), is(4));
-        assertThat(it.next(), is(3));
-        assertThat(it.next(), is(2));
-        assertThat(it.next(), is(1));
+        assertSame(5, it.next());
+        assertSame(4, it.next());
+        assertSame(3, it.next());
+        assertSame(2, it.next());
+        assertSame(1, it.next());
     }
 }
