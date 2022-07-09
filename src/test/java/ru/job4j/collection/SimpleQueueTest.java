@@ -1,53 +1,50 @@
 package ru.job4j.collection;
 
+import static org.junit.Assert.assertSame;
+import org.junit.Before;
+import org.junit.Test;
 import java.util.NoSuchElementException;
 
-import org.junit.Test;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 public class SimpleQueueTest {
+    private SimpleQueue<Integer> queue;
+
+    @Before
+    public void setUp() {
+        queue = new SimpleQueue<>();
+    }
 
     @Test
     public void whenPushPoll() {
-        SimpleQueue<Integer> queue = new SimpleQueue<>();
         queue.push(1);
-        int rsl = queue.poll();
-        assertThat(rsl, is(1));
+        assertSame(1, queue.poll());
     }
 
     @Test
     public void when2PushPoll() {
-        SimpleQueue<Integer> queue = new SimpleQueue<>();
         queue.push(1);
         queue.push(2);
-        int rsl = queue.poll();
-        assertThat(rsl, is(1));
+        assertSame(1, queue.poll());
     }
 
     @Test
     public void when2PushPollPushPoll() {
-        SimpleQueue<Integer> queue = new SimpleQueue<>();
         queue.push(1);
         queue.poll();
         queue.push(2);
-        int rsl = queue.poll();
-        assertThat(rsl, is(2));
+        assertSame(2, queue.poll());
     }
 
     @Test(expected = NoSuchElementException.class)
     public void whenEmptyPoll() {
-        SimpleQueue<Integer> queue = new SimpleQueue<>();
         queue.poll();
     }
 
     @Test
     public void whenPushPushPollAndPush() {
-        SimpleQueue<Integer> queue = new SimpleQueue<>();
         queue.push(1);
         queue.push(2);
         queue.poll();
         queue.push(3);
-        assertThat(queue.poll(), is(2));
+        assertSame(2, queue.poll());
     }
 }
