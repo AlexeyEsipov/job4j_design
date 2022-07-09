@@ -1,12 +1,10 @@
 package ru.job4j.iterator;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 import org.junit.Test;
-import ru.job4j.iterator.BackwardArrayIt;
 
 import java.util.NoSuchElementException;
+
+import static org.junit.Assert.*;
 
 public class BackwardArrayItTest {
 
@@ -15,19 +13,32 @@ public class BackwardArrayItTest {
         BackwardArrayIt it = new BackwardArrayIt(
                 new int[] {1, 2, 3}
         );
-        assertThat(it.hasNext(), is(true));
-        assertThat(it.hasNext(), is(true));
+        assertTrue(it.hasNext());
+        assertTrue(it.hasNext());
+        assertSame(3, it.next());
+    }
+
+    @Test
+    public void whenMultiCallHasNextThenNext() {
+        BackwardArrayIt it = new BackwardArrayIt(
+                new int[] {1, 2, 3}
+        );
+        assertTrue(it.hasNext());
+        assertTrue(it.hasNext());
+        assertTrue(it.hasNext());
+        assertSame(3, it.next());
+
     }
 
     @Test
     public void whenReadSequence() {
         BackwardArrayIt it = new BackwardArrayIt(
-                new int[] {1, 2, 3, 4}
+                new int[] {1, 2, 3}
         );
-        assertThat(it.next(), is(4));
-        assertThat(it.next(), is(3));
-        assertThat(it.next(), is(2));
-        assertThat(it.next(), is(1));
+        assertSame(3, it.next());
+        assertSame(2, it.next());
+        assertSame(1, it.next());
+        assertFalse(it.hasNext());
     }
 
     @Test(expected = NoSuchElementException.class)
