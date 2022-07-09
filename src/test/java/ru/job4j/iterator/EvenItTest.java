@@ -44,7 +44,6 @@ public class EvenItTest {
         assertThat(it.hasNext(), is(false));
     }
 
-// доп тест на пустой массив
     @Test
     public void  shouldReturnFalseIfNoAnyNumbers() {
         it = new EvenIt(new int[]{});

@@ -8,6 +8,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 public class AnalysisTest {
+
     @Test
     public void whenAddDelChangeThenAddDelChange() {
         Analysis analysis = new Analysis();
@@ -21,8 +22,8 @@ public class AnalysisTest {
                 new Analysis.User(4, "d"),
                 new Analysis.User(5, "e")));
         Analysis.Info info = analysis.diff(previous, current);
-        assertThat(info.getAdded(), is(1)); // 5-e
-        assertThat(info.getDeleted(), is(2)); // 1-a ; 2-b
-        assertThat(info.getChanged(), is(1)); // 3-c -> 3-c1
+        assertThat(info.getAdded(), is(1));
+        assertThat(info.getDeleted(), is(2));
+        assertThat(info.getChanged(), is(1));
     }
 }

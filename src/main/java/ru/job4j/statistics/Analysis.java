@@ -13,14 +13,14 @@ public class Analysis {
         currentMap = convertListToMap(current);
         previousMap = convertListToMap(previous);
         for (int id: previousMap.keySet()) {
-            if (!currentMap.containsKey(id)) { //нет ключа, элемент был удален
+            if (!currentMap.containsKey(id)) {
                 deleted++;
                 continue;
             }
-            if (currentMap.containsKey(id)) { //ключ есть
-                if (currentMap.get(id).equals(previousMap.get(id))) { //элемент не изменен
+            if (currentMap.containsKey(id)) {
+                if (currentMap.get(id).equals(previousMap.get(id))) {
                     exist++;
-                } else { //элемент был изменен
+                } else {
                     changed++;
                 }
             }

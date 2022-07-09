@@ -68,7 +68,8 @@ public class MergeSetUser {
             }
         }
     }
-    //временная сложность метода m (общее количество емайлов)
+
+    /*временная сложность метода m (общее количество емайлов)*/
 
     private void unionSet(LinkedHashMap<String, LinkedHashSet<String>> sourceMap,
                           LinkedHashMap<String, LinkedHashSet<String>> destMap,
@@ -80,7 +81,8 @@ public class MergeSetUser {
         destSet.addAll(sourceSet);
         destMap.replace(destName, destSet);
     }
-    //временная сложность метода m (общее количество емайлов)
+
+    /*временная сложность метода m (общее количество емайлов)*/
 
     private void convertMapUserMailsToListEmails(LinkedHashMap<String,
             LinkedHashSet<String>> sourceMap, ArrayList<Mail> destList) {
@@ -93,7 +95,8 @@ public class MergeSetUser {
             }
         }
     }
-    //временная сложность метода m (общее количество емайлов)
+
+    /*временная сложность метода m (общее количество емайлов)*/
 
     private void convertUserMailsToListToMap(ListUser sourceUser, ArrayList<Mail> listUser,
                                              LinkedHashMap<String, LinkedHashSet<String>> mapUser) {
