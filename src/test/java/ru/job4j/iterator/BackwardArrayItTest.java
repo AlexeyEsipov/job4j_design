@@ -1,51 +1,50 @@
 package ru.job4j.iterator;
 
-import org.junit.Test;
-
+import static org.assertj.core.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 import java.util.NoSuchElementException;
 
-import static org.junit.Assert.*;
-
-public class BackwardArrayItTest {
+class BackwardArrayItTest {
 
     @Test
-    public void whenMultiCallHasNextThenTrue() {
+    void whenMultiCallHasNextThenTrue() {
         BackwardArrayIt it = new BackwardArrayIt(
                 new int[] {1, 2, 3}
         );
-        assertTrue(it.hasNext());
-        assertTrue(it.hasNext());
-        assertSame(3, it.next());
+        assertThat(it.hasNext()).isTrue();
+        assertThat(it.hasNext()).isTrue();
+        assertThat(it.next()).isEqualTo(3);
     }
 
     @Test
-    public void whenMultiCallHasNextThenNext() {
+    void whenMultiCallHasNextThenNext() {
         BackwardArrayIt it = new BackwardArrayIt(
                 new int[] {1, 2, 3}
         );
-        assertTrue(it.hasNext());
-        assertTrue(it.hasNext());
-        assertTrue(it.hasNext());
-        assertSame(3, it.next());
+        assertThat(it.hasNext()).isTrue();
+        assertThat(it.hasNext()).isTrue();
+        assertThat(it.hasNext()).isTrue();
+        assertThat(it.next()).isEqualTo(3);
 
     }
 
     @Test
-    public void whenReadSequence() {
+    void whenReadSequence() {
         BackwardArrayIt it = new BackwardArrayIt(
                 new int[] {1, 2, 3}
         );
-        assertSame(3, it.next());
-        assertSame(2, it.next());
-        assertSame(1, it.next());
-        assertFalse(it.hasNext());
+        assertThat(it.next()).isEqualTo(3);
+        assertThat(it.next()).isEqualTo(2);
+        assertThat(it.next()).isEqualTo(1);
+        assertThat(it.hasNext()).isFalse();
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void whenNextFromEmpty() {
+    @Test
+    void whenNextFromEmpty() {
         BackwardArrayIt it = new BackwardArrayIt(
                 new int[] {}
         );
-        it.next();
+        assertThatThrownBy(it::next)
+                .isInstanceOf(NoSuchElementException.class);
     }
 }
