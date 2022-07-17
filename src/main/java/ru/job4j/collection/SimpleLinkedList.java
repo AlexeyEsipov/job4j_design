@@ -1,19 +1,23 @@
 package ru.job4j.collection;
 
-import java.util.*;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
-public class SimpleLinkedList<E> implements Iterable<E> {
+public class SimpleLinkedList<E> implements LinkedList<E> {
 
     private int size = 0;
     private int modCount = 0;
     private Node<E> first;
     private Node<E> last;
 
-    public void add(E e) {
+    @Override
+    public void add(E value) {
         final Node<E> l = last;
-        final Node<E> newNode = new Node<>(l, e, null);
+        final Node<E> newNode = new Node<>(value, null);
         last = newNode;
-        if (l == null) {
+        if (Objects.isNull(l)) {
             first = newNode;
         } else {
             l.next = newNode;
@@ -22,6 +26,7 @@ public class SimpleLinkedList<E> implements Iterable<E> {
         modCount++;
     }
 
+    @Override
     public E get(int index) {
         Objects.checkIndex(index, size);
         Node<E> rsl = first;
@@ -33,46 +38,37 @@ public class SimpleLinkedList<E> implements Iterable<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new ContIterator<>();
+        return new Iterator<>() {
+            private Node<E> node = first;
+            private final int expectedModCount = modCount;
+
+            @Override
+            public boolean hasNext() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                return Objects.nonNull(node);
+            }
+
+            @Override
+            public E next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                E value = node.item;
+                node = node.next;
+                return  value;
+            }
+        };
     }
 
     private static class Node<E> {
         private E item;
         private Node<E> next;
-        private Node<E> prev;
 
-        Node(Node<E> prev, E element, Node<E> next) {
+        Node(E element, Node<E> next) {
             this.item = element;
             this.next = next;
-            this.prev = prev;
-        }
-    }
-
-    private class ContIterator<E> implements Iterator<E> {
-        private int nextElement = 0;
-        private final int expectedModCount = modCount;
-        private Node<E> rsl1 = (Node<E>) first;
-
-        @Override
-        public boolean hasNext() {
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            return nextElement < size;
-        }
-
-        @Override
-        public E next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            E result = rsl1.item;
-            rsl1 = rsl1.next;
-            nextElement++;
-            return result;
         }
     }
 }
