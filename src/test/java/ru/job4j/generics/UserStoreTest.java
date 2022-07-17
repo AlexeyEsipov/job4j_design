@@ -1,57 +1,67 @@
 package ru.job4j.generics;
 
-import org.junit.Test;
-
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-
-public class UserStoreTest {
+import static org.assertj.core.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+class UserStoreTest {
 
     @Test
-    public void whenAddThenReplaceIsRight() {
-        UserStore userStore = new UserStore();
-        User alex = new User("Alex");
-        User ivan = new User("Ivan");
-        userStore.add(alex);
-        assertTrue(userStore.replace("Alex", ivan));
+    void whenAddAndFindThenUsernameIsPetr() {
+        UserStore store = new UserStore();
+        store.add(new User("1", "Petr"));
+        User result = store.findById("1");
+        assertThat(result.getUsername()).isEqualTo("Petr");
     }
 
     @Test
-    public void whenDeleteThenReplaceIsFalse() {
-        UserStore userStore = new UserStore();
-        User alex = new User("Alex");
-        User ivan = new User("Ivan");
-        userStore.add(alex);
-        userStore.delete("Alex");
-        assertFalse(userStore.replace("Alex", ivan));
+    void whenAddAndFindThenUserIsNull() {
+        UserStore store = new UserStore();
+        store.add(new User("1", "Petr"));
+        User result = store.findById("10");
+        assertThat(result).isNull();
     }
 
     @Test
-    public void whenDeleteThenIdNotFound() {
-        UserStore userStore = new UserStore();
-        User alex = new User("Alex");
-        User ivan = new User("Ivan");
-        userStore.add(alex);
-        userStore.add(ivan);
-        userStore.delete("Ivan");
-        assertNull(userStore.findById("Ivan"));
+    void whenAddDuplicateAndFindUsernameIsPetr() {
+        UserStore store = new UserStore();
+        store.add(new User("1", "Petr"));
+        store.add(new User("1", "Maxim"));
+        User result = store.findById("1");
+        assertThat(result.getUsername()).isEqualTo("Petr");
     }
 
     @Test
-    public void whenAddThenIdFound() {
-        UserStore userStore = new UserStore();
-        User alex = new User("Alex");
-        userStore.add(null);
-        userStore.add(alex);
-        assertThat(userStore.findById("Alex"), is(alex));
+    void whenReplaceThenUsernameIsMaxim() {
+        UserStore store = new UserStore();
+        store.add(new User("1", "Petr"));
+        store.replace("1", new User("1", "Maxim"));
+        User result = store.findById("1");
+        assertThat(result.getUsername()).isEqualTo("Maxim");
     }
 
     @Test
-    public void whenAddNullThenIdFound() {
-        UserStore userStore = new UserStore();
-        User alex = new User("Alex");
-        userStore.add(null);
-        userStore.add(alex);
-        assertThat(userStore.findById("Alex"), is(alex));
+    void whenNoReplaceUserThenNoChangeUsername() {
+        UserStore store = new UserStore();
+        store.add(new User("1", "Petr"));
+        store.replace("10", new User("10", "Maxim"));
+        User result = store.findById("1");
+        assertThat(result.getUsername()).isEqualTo("Petr");
+    }
+
+    @Test
+    void whenDeleteUserThenUserIsNull() {
+        UserStore store = new UserStore();
+        store.add(new User("1", "Petr"));
+        store.delete("1");
+        User result = store.findById("1");
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenNoDeleteUserThenUsernameIsPetr() {
+        UserStore store = new UserStore();
+        store.add(new User("1", "Petr"));
+        store.delete("10");
+        User result = store.findById("1");
+        assertThat(result.getUsername()).isEqualTo("Petr");
     }
 }
