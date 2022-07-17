@@ -2,25 +2,22 @@ package ru.job4j.collection;
 
 import java.util.*;
 
-public class SimpleArray<T> implements SimpleList<T> {
+public class SimpleArrayList<T> implements SimpleList<T> {
+
     private T[] container;
-    private int size = 0;
+    private int size;
     private int modCount;
 
-    public SimpleArray(int capacity) {
+    public SimpleArrayList(int capacity) {
         this.container = (T[]) new Object[capacity];
     }
 
-    public SimpleArray() {
-        this(0);
-    }
-
     @Override
-    public void add(T model) {
+    public void add(T value) {
         if (size == container.length) {
             grow();
         }
-        container[size++] = model;
+        container[size++] = value;
         modCount++;
     }
 
@@ -53,7 +50,7 @@ public class SimpleArray<T> implements SimpleList<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new Iterator<>() {
+        return new Iterator<T>() {
             private int index = 0;
             private final int expectedModCount = modCount;
 
@@ -76,11 +73,8 @@ public class SimpleArray<T> implements SimpleList<T> {
     }
 
     private void grow() {
-        if (container.length == 0) {
-            container = Arrays.copyOf(container, 1);
-        } else {
-            container = Arrays.copyOf(container, container.length * 2);
-        }
+        int length = container.length == 0 ? 1 : container.length * 2;
+        container = Arrays.copyOf(container, length);
         modCount++;
     }
 }
