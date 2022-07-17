@@ -1,86 +1,90 @@
 package ru.job4j.collection;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static org.junit.Assert.*;
-
-public class ForwardLinkedTest {
+class ForwardLinkedTest {
     private ForwardLinked<Integer> linked;
 
-    @Before
-    public void init() {
+    @BeforeEach
+    void init() {
         linked = new ForwardLinked<>();
+        linked.add(1);
+        linked.add(2);
+        linked.add(3);
+        linked.add(4);
     }
 
-    @After
-    public void after() {
+    @AfterEach
+    void after() {
         linked = null;
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void whenDeleteFirst() {
-        linked.addLast(1);
-        linked.addLast(2);
-        linked.deleteFirst();
-        linked.deleteFirst();
-        linked.iterator().next();
+    @Test
+    void whenDeleteFirst() {
+        assertThat(linked.deleteFirst()).isEqualTo(1);
+        assertThat(linked.deleteFirst()).isEqualTo(2);
+        assertThat(linked.deleteFirst()).isEqualTo(3);
+        assertThat(linked.deleteFirst()).isEqualTo(4);
+        assertThatThrownBy(linked.iterator()::next)
+                .isInstanceOf(NoSuchElementException.class);
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void whenDeleteLast() {
-        linked.addLast(1);
-        linked.addLast(2);
+    @Test
+    void whenDeleteEmptyLinked() {
+        ForwardLinked<Integer> linked = new ForwardLinked<>();
+        assertThatThrownBy(linked::deleteFirst)
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    void whenMultiDelete() {
+        linked.deleteFirst();
+        Iterator<Integer> it = linked.iterator();
+        assertThat(it.next()).isEqualTo(2);
+    }
+
+    @Test
+    void whenAddThenIterator() {
+        linked.add(1);
+        linked.add(2);
+        Iterator<Integer> it = linked.iterator();
+        assertThat(it.next()).isEqualTo(1);
+        assertThat(it.next()).isEqualTo(2);
+    }
+
+      @Test
+    void whenDeleteLast() {
+        linked.add(1);
+        linked.add(2);
         linked.deleteLast();
         linked.deleteLast();
-        linked.iterator().next();
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void whenDeleteEmptyLinked() {
-        linked.deleteFirst();
+        assertThatThrownBy(linked.iterator()::next)
+                .isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
-    public void whenSize0ThenReturnFalse() {
-        assertFalse(linked.revert());
+    void whenSize0ThenReturnFalse() {
+        ForwardLinked<Integer> linked = new ForwardLinked<>();
+        assertThat(linked.revert()).isFalse();
     }
 
     @Test
-    public void whenMultiDelete() {
-        linked.addLast(1);
-        linked.addLast(2);
-        linked.deleteFirst();
-        Iterator<Integer> it = linked.iterator();
-        assertSame(2, it.next());
+    void whenSize1ThenReturnFalse() {
+        ForwardLinked<Integer> linked = new ForwardLinked<>();
+        linked.add(1);
+        assertThat(linked.revert()).isFalse();
     }
 
     @Test
-    public void whenAddThenIterator() {
-        linked.addLast(1);
-        linked.addLast(2);
-        Iterator<Integer> it = linked.iterator();
-        assertSame(1, it.next());
-        assertSame(2, it.next());
-    }
-
-    @Test
-    public void whenAddAndRevertThenIterator() {
-        linked.addLast(1);
-        linked.addLast(2);
-        linked.addLast(3);
-        linked.addLast(4);
-        linked.addLast(5);
-        assertTrue(linked.revert());
-        Iterator<Integer> it = linked.iterator();
-        assertSame(5, it.next());
-        assertSame(4, it.next());
-        assertSame(3, it.next());
-        assertSame(2, it.next());
-        assertSame(1, it.next());
+    void whenAddAndRevertTrue() {
+        assertThat(linked).hasSize(4).containsSequence(1, 2, 3, 4);
+        assertThat(linked.revert()).isTrue();
+        assertThat(linked).hasSize(4).containsSequence(4, 3, 2, 1);
     }
 }

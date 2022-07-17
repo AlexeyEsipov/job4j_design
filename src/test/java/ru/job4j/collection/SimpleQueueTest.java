@@ -1,50 +1,59 @@
 package ru.job4j.collection;
 
-import static org.junit.Assert.assertSame;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.NoSuchElementException;
 
-public class SimpleQueueTest {
+class SimpleQueueTest {
     private SimpleQueue<Integer> queue;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         queue = new SimpleQueue<>();
+        queue.push(1);
     }
 
     @Test
-    public void whenPushPoll() {
-        queue.push(1);
-        assertSame(1, queue.poll());
+    void whenPushPoll() {
+        assertThat(queue.poll()).isEqualTo(1);
     }
 
     @Test
-    public void when2PushPoll() {
-        queue.push(1);
+    void when2PushPoll() {
         queue.push(2);
-        assertSame(1, queue.poll());
+        assertThat(queue.poll()).isEqualTo(1);
     }
 
     @Test
-    public void when2PushPollPushPoll() {
-        queue.push(1);
+    void when2PushPollPushPoll() {
         queue.poll();
         queue.push(2);
-        assertSame(2, queue.poll());
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void whenEmptyPoll() {
-        queue.poll();
+        assertThat(queue.poll()).isEqualTo(2);
     }
 
     @Test
-    public void whenPushPushPollAndPush() {
-        queue.push(1);
+    void whenEmptyPoll() {
+        SimpleQueue<Integer> queue = new SimpleQueue<>();
+        assertThatThrownBy(queue::poll)
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    void when2PushPollPushPollEmpty() {
+        queue.poll();
+        queue.push(2);
+        queue.poll();
+        assertThatThrownBy(queue::poll)
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    void whenPushPushPollAndPush() {
         queue.push(2);
         queue.poll();
         queue.push(3);
-        assertSame(2, queue.poll());
+        assertThat(queue.poll()).isEqualTo(2);
     }
 }
