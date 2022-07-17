@@ -1,91 +1,97 @@
 package ru.job4j.iterator;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 import java.util.NoSuchElementException;
 
-public class MatrixItTest  {
+class MatrixItTest  {
 
     @Test
-    public void when4El() {
+    void when4El() {
         int[][] in = {
                 {1}
         };
         MatrixIt it = new MatrixIt(in);
-        assertSame(1, it.next());
+        assertThat(it.next()).isEqualTo(1);
     }
 
     @Test
-    public void whenFirstEmptyThenNext() {
+    void whenFirstEmptyThenNext() {
         int[][] in = {
                 {}, {1}
         };
         MatrixIt it = new MatrixIt(in);
-        assertSame(1, it.next());
+        assertThat(it.next()).isEqualTo(1);
     }
 
     @Test
-    public void whenFirstEmptyThenHashNext() {
+    void whenFirstEmptyThenHashNext() {
         int[][] in = {
                 {}, {1}
         };
         MatrixIt it = new MatrixIt(in);
-        assertTrue(it.hasNext());
+        assertThat(it.hasNext()).isTrue();
     }
 
     @Test
-    public void whenRowHasDiffSize() {
+    void whenRowHasDiffSize() {
         int[][] in = {
-                {1}, {2, 3}
+                {1}, {2, 3}, {}, {}, {4}
         };
         MatrixIt it = new MatrixIt(in);
-        assertSame(1, it.next());
-        assertSame(2, it.next());
-        assertSame(3, it.next());
+        assertThat(it.next()).isEqualTo(1);
+        assertThat(it.next()).isEqualTo(2);
+        assertThat(it.next()).isEqualTo(3);
+        assertThat(it.next()).isEqualTo(4);
+        assertThat(it.hasNext()).isFalse();
     }
 
     @Test
-    public void whenFewEmpty() {
+    void whenFewEmpty() {
         int[][] in = {
                 {1}, {}, {}, {}, {2}
         };
         MatrixIt it = new MatrixIt(in);
-        assertSame(1, it.next());
-        assertSame(2, it.next());
+        assertThat(it.next()).isEqualTo(1);
+        assertThat(it.next()).isEqualTo(2);
+        assertThat(it.hasNext()).isFalse();
     }
 
     @Test
-    public void whenEmpty() {
+    void whenEmpty() {
         int[][] in = {
                 {}
         };
         MatrixIt it = new MatrixIt(in);
-        assertFalse(it.hasNext());
+        assertThat(it.hasNext()).isFalse();
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void whenEmptyThenNext() {
+    @Test
+    void whenEmptyThenNext() {
         int[][] in = {
                 {}
         };
         MatrixIt it = new MatrixIt(in);
-        it.next();
+        assertThatThrownBy(it::next)
+                .isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
-    public void whenMultiHashNext() {
+    void whenMultiHashNext() {
         int[][] in = {
                 {}, {1}
         };
         MatrixIt it = new MatrixIt(in);
-        assertTrue(it.hasNext());
-        assertTrue(it.hasNext());
+        assertThat(it.hasNext()).isTrue();
+        assertThat(it.hasNext()).isTrue();
     }
 
     @Test
-    public void whenNoElements() {
-        int[][] in = {{}, {}, {}};
+    void whenNoElements() {
+        int[][] in = {
+                {}, {}, {}
+        };
         MatrixIt it = new MatrixIt(in);
-        assertFalse(it.hasNext());
+        assertThat(it.hasNext()).isFalse();
     }
 }
