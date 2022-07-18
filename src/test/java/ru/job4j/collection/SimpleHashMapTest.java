@@ -31,7 +31,7 @@ class SimpleHashMapTest {
     }
 
     @Test
-    void checkPutNull() {
+    void checkPutNullOnlyFirstCell() {
         SimpleHashMap<Integer, String> map = new SimpleHashMap<>();
         assertThat(map.put(null, "0000")).isTrue();
         assertThat(map.put(0, "0")).isFalse();
