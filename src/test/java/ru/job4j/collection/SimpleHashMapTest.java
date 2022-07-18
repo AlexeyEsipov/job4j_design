@@ -18,16 +18,25 @@ class SimpleHashMapTest {
 
     @Test
     void checkSimpleIterator() {
-        assertThat(map).hasSize(4);
+        SimpleHashMap<Integer, String> map = new SimpleHashMap<>();
+        assertThat(map).isEmpty();
+    }
+
+    @Test
+    void whenPutThenTrue() {
+        SimpleHashMap<Integer, String> map = new SimpleHashMap<>();
+        assertThat(map.put(7, "7")).isTrue();
+        assertThat(map.put(7, "77")).isFalse();
     }
 
     @Test
     void checkIteratorEnd() {
         SimpleHashMap<Integer, String> map = new SimpleHashMap<>();
-        assertThat(map.put(7, "7")).isTrue();
-        Iterator<Integer> iterator = map.iterator();
-        assertThat(iterator.hasNext()).isTrue();
-        assertThat(iterator.next()).isEqualTo(7);
+        map.put(7, "7");
+        Iterator<Integer> it = map.iterator();
+        assertThat(it.hasNext()).isTrue();
+        assertThat(it.next()).isEqualTo(7);
+        assertThat(it.hasNext()).isFalse();
     }
 
     @Test
@@ -35,6 +44,21 @@ class SimpleHashMapTest {
         SimpleHashMap<Integer, String> map = new SimpleHashMap<>();
         assertThat(map.put(null, "0000")).isTrue();
         assertThat(map.put(0, "0")).isFalse();
+    }
+
+    @Test
+    void checkGet() {
+        SimpleHashMap<Integer, String> map = new SimpleHashMap<>();
+        map.put(7, "7");
+        assertThat(map.get(7)).isEqualTo("7");
+    }
+
+    @Test
+    void checkGetAndGet() {
+        SimpleHashMap<Integer, String> map = new SimpleHashMap<>();
+        map.put(7, "7");
+        map.get(7);
+        assertThat(map.get(7)).isEqualTo("7");
     }
 
     @Test
