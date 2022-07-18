@@ -1,62 +1,143 @@
 package ru.job4j.collection;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import static org.assertj.core.api.Assertions.*;
 
-import org.junit.Test;
+class SimpleHashMapTest {
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+    private final SimpleHashMap<Integer, String> map = new SimpleHashMap<>();
 
-public class SimpleHashMapTest {
-
-    @Test
-    public void whenInsertThenGet() {
-        SimpleHashMap<String, String> shm = new SimpleHashMap<>();
-        shm.insert("a", "abram");
-        shm.insert("b", "barny");
-        assertThat(shm.get("a"), is("abram"));
-        assertThat(shm.get("b"), is("barny"));
+    @BeforeEach
+    void setUp() {
+        map.put(1, "1");
+        map.put(2, "2");
+        map.put(3, "3");
+        map.put(4, "4");
     }
 
     @Test
-    public void whenDeleteThenNull() {
-        SimpleHashMap<String, String> shm = new SimpleHashMap<>();
-        shm.insert("a", "abram");
-        shm.insert("b", "barny");
-        assertThat(shm.get("a"), is("abram"));
-        assertThat(shm.get("b"), is("barny"));
-        shm.delete("a");
-        assertNull(shm.get("a"));
+    void checkSimpleIterator() {
+        assertThat(map).hasSize(4);
     }
 
     @Test
-    public void whenInsertAndGrowThenGet() {
-        SimpleHashMap<String, String> shm = new SimpleHashMap<>();
-        shm.insert("a", "abram");
-        shm.insert("b", "barny");
-        shm.insert("c", "cat");
-        shm.insert("d", "david");
-        shm.insert("e", "eva");
-        shm.insert("f", "ford");
-        shm.insert("g", "garry");
-        shm.insert("h", "helen");
-        assertThat(shm.get("a"), is("abram"));
-        assertThat(shm.get("h"), is("helen"));
+    void checkIteratorEnd() {
+        SimpleHashMap<Integer, String> map = new SimpleHashMap<>();
+        assertThat(map.put(7, "7")).isTrue();
+        Iterator<Integer> iterator = map.iterator();
+        assertThat(iterator.hasNext()).isTrue();
+        assertThat(iterator.next()).isEqualTo(7);
     }
 
     @Test
-    public void whenInsertDuplicateThenDeleteOne() {
-        SimpleHashMap<String, String> shm = new SimpleHashMap<>();
-        shm.insert("a", "abram");
-        shm.insert("a", "barny");
-        assertThat(shm.get("a"), is("abram"));
-        shm.delete("a");
-        assertNull(shm.get("a"));
+    void checkPutNull() {
+        SimpleHashMap<Integer, String> map = new SimpleHashMap<>();
+        assertThat(map.put(null, "0000")).isTrue();
+        assertThat(map.put(0, "0")).isFalse();
     }
 
     @Test
-    public void whenInsertDuplicateThenKeepFirst() {
-        SimpleHashMap<String, String> shm = new SimpleHashMap<>();
-        shm.insert("a", "abram");
-        shm.insert("a", "barny");
-        assertThat(shm.get("a"), is("abram"));
+    void whenCheckGet() {
+        assertThat(map.get(1)).isEqualTo("1");
+        assertThat(map).hasSize(4);
+        assertThat(map.get(5)).isNull();
+        assertThat(map).hasSize(4);
+    }
+
+    @Test
+    void whenCheckPut() {
+        assertThat(map.put(0, "0")).isTrue();
+        assertThat(map).hasSize(5);
+        assertThat(map.put(8, "8")).isFalse();
+        assertThat(map).hasSize(5);
+        assertThat(map.put(1, "10")).isFalse();
+        assertThat(map.get(1)).isEqualTo("1");
+        assertThat(map).hasSize(5);
+    }
+
+    @Test
+    void whenCheckRemove() {
+        assertThat(map.remove(2)).isTrue();
+        assertThat(map).hasSize(3);
+        assertThat(map.remove(2)).isFalse();
+        assertThat(map).hasSize(3);
+        assertThat(map.remove(5)).isFalse();
+        assertThat(map).hasSize(3);
+    }
+
+    @Test
+    void whenCheckIterator() {
+        map.remove(2);
+        map.remove(3);
+        map.put(null, "0000");
+        Iterator<Integer> it = map.iterator();
+        assertThat(it.hasNext()).isTrue();
+        assertThat(it.next()).isNull();
+        assertThat(it.next()).isEqualTo(1);
+        assertThat(it.next()).isEqualTo(4);
+        assertThat(it.hasNext()).isFalse();
+        assertThatThrownBy(it::next)
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    void whenConcurrentIteratorAdd() {
+        Iterator<Integer> it = map.iterator();
+        map.put(0, "0");
+        assertThatThrownBy(it::hasNext)
+                .isInstanceOf(ConcurrentModificationException.class);
+    }
+
+    @Test
+    void whenConcurrentIteratorRemove() {
+        Iterator<Integer> it = map.iterator();
+        map.remove(1);
+        assertThatThrownBy(it::hasNext)
+                .isInstanceOf(ConcurrentModificationException.class);
+    }
+
+    @Test
+    void whenNotConcurrentIteratorGet() {
+        Iterator<Integer> it = map.iterator();
+        map.get(1);
+        assertThat(it.hasNext()).isTrue();
+    }
+
+    @Test
+    void whenMapExpand() {
+        List<Integer> listKey = new ArrayList<>();
+        map.put(null, "0000");
+        assertThat(map.put(15, "15")).isTrue();
+        assertThat(map).hasSize(6);
+        assertThat(map.put(8, "8")).isTrue();
+        assertThat(map.put(16, "16")).isFalse();
+        assertThat(map.get(4)).isEqualTo("4");
+        assertThat(map.get(8)).isEqualTo("8");
+        assertThat(map.get(15)).isEqualTo("15");
+        for (Integer integer : map) {
+            listKey.add(integer);
+        }
+        assertThat(listKey).hasSize(7).contains(null, 1, 2, 3, 4, 8, 15);
+    }
+
+    @Test
+    void whenCheckPutKeyNull() {
+        assertThat(map.put(null, "0000")).isTrue();
+        assertThat(map).hasSize(5);
+    }
+
+    @Test
+    void whenCheckGetKeyNull() {
+        map.put(null, "0000");
+        assertThat(map.get(null)).isEqualTo("0000");
+        assertThat(map).hasSize(5);
+    }
+
+    @Test
+    void whenCheckRemoveKeyNull() {
+        map.put(null, "0000");
+        assertThat(map.remove(null)).isTrue();
+        assertThat(map).hasSize(4);
     }
 }

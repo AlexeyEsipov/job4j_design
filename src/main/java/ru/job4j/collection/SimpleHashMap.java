@@ -1,103 +1,136 @@
 package ru.job4j.collection;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
-public class SimpleHashMap<K, V> {
-    private Object[] container;
-    private int load = 10;
-    private int indexFree;
-    private final double loadFactor = 0.7;
+public class SimpleHashMap<K, V> implements SimpleMap<K, V> {
+    private static final float LOAD_FACTOR = 0.75f;
 
-    public SimpleHashMap() {
-        this.container = new Object[10];
-        this.indexFree = 0;
+    private int capacity = 8;
+
+    private int count = 0;
+
+    private int modCount = 0;
+    private MapEntry<K, V>[] table = new MapEntry[capacity];
+
+    @Override
+    public boolean put(K key, V value) {
+        if (count >= capacity * LOAD_FACTOR) {
+            expand();
+        }
+        int index = indexFor(hash(key));
+        boolean rsl = Objects.isNull(table[index]);
+        if (rsl) {
+            table[index] = new MapEntry<>(key, value);
+            count++;
+            modCount++;
+        }
+        return rsl;
     }
 
-    public boolean insert(K key, V value) {
-        if (container[hash(key.hashCode())] != null) {
-            return false;
+    private int hash(K key) {
+        int result = 0;
+        if (!Objects.isNull(key)) {
+            int h = key.hashCode();
+            result = h ^ (h >>> 16);
         }
-        if (indexFree > load * loadFactor) {
-            grow();
-        }
-        container[hash(key.hashCode())] = new Box(key, value);
-        ++indexFree;
-        return true;
+        return result;
     }
 
+    private int indexFor(int hash) {
+        return hash & (capacity - 1);
+    }
+
+    private void expand() {
+        capacity = capacity * 2;
+        MapEntry<K, V>[] tempTable = new MapEntry[capacity];
+        for (MapEntry<K, V> entry : table) {
+            if (!Objects.isNull(entry)) {
+                tempTable[indexFor(hash(entry.key))] = entry;
+            }
+        }
+        modCount++;
+        table = tempTable;
+    }
+
+    @Override
     public V get(K key) {
-        int index = getIndex(key);
-        if (index == -1) {
-            return null;
+        V result = null;
+        int index = indexFor(hash(key));
+        boolean isCellNotNull = !Objects.isNull(table[index]);
+        if (isCellNotNull) {
+            K keyTable = table[index].key;
+            if (Objects.isNull(keyTable) && Objects.isNull(key)) {
+                result = table[index].value;
+            }
+            if (!Objects.isNull(keyTable) && !Objects.isNull(key)
+                    && table[index].key.hashCode() == key.hashCode()
+                    && table[index].key.equals(key)) {
+                result = table[index].value;
+            }
+
         }
-        return ((Box) container[index]).value;
+        return result;
     }
 
-    public boolean delete(K key) {
-        int index = getIndex(key);
-        if (index == -1) {
-            return false;
+    @Override
+    public boolean remove(K key) {
+        boolean result = false;
+        int index = indexFor(hash(key));
+        boolean isCellNotNull = !Objects.isNull(table[index]);
+        if (isCellNotNull) {
+            K keyTable = table[index].key;
+            if ((Objects.isNull(keyTable) && Objects.isNull(key))
+                    || (!Objects.isNull(keyTable)
+                    && !Objects.isNull(key)
+                    && (table[index].key.hashCode() == key.hashCode()
+                    && table[index].key.equals(key)))) {
+                table[index] = null;
+                result = true;
+                count--;
+                modCount++;
+            }
+
         }
-        container[index] = null;
-        --indexFree;
-        return true;
+        return result;
     }
 
-    private class Box {
+    @Override
+    public Iterator<K> iterator() {
+        return new Iterator<>() {
+            private int index = 0;
+            private final int expectedModCount = modCount;
+
+            @Override
+            public boolean hasNext() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                while (index < capacity && table[index] == null) {
+                    index++;
+                }
+                return index < capacity;
+            }
+
+            @Override
+            public K next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return table[index++].key;
+            }
+        };
+    }
+
+    private static class MapEntry<K, V> {
         private K key;
-        private int keyHashCode;
         private V value;
 
-        Box(K key, V value) {
+        public MapEntry(K key, V value) {
             this.key = key;
-            this.keyHashCode = key.hashCode();
             this.value = value;
-        }
-    }
-
-    private int getIndex(K key) {
-        int index = hash(key.hashCode());
-        if (container[index] == null) {
-            return -1;
-        }
-        Box boxEl = (Box) container[index];
-        if (boxEl.keyHashCode == key.hashCode() && boxEl.key.equals(key)) {
-            return index;
-        }
-        return -1;
-    }
-
-    private int hash(int code) {
-        return code % container.length;
-    }
-
-    private class MapIterator<Box> implements Iterator {
-        private int indexNext = 0;
-
-        @Override
-        public boolean hasNext() {
-            for (int i = indexNext; i < container.length; i++) {
-                if (container[i] != null) {
-                    indexNext = i;
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        @Override
-        public Box next() {
-            return (Box) container[indexNext];
-        }
-    }
-
-    private void grow() {
-        Object[] newContainer = new Object[load * 2];
-        Iterator<Box> iterator = new MapIterator<Box>();
-        while (iterator.hasNext()) {
-            Box el = iterator.next();
-            int index = el.keyHashCode % newContainer.length;
-            newContainer[index] = el;
         }
     }
 }
