@@ -44,7 +44,7 @@ public class ConsoleChat {
 
     private void loadAnswer() {
         try (BufferedReader reader = new BufferedReader(
-                                 new FileReader(botAnswersPath, Charset.forName("WINDOWS-1251")))) {
+                                 new FileReader(botAnswersPath, Charset.forName("WINDOWS-1251"/*"UTF-8"*/)))) {
             while (reader.ready()) {
                 botAnswersList.add(reader.readLine());
             }
@@ -56,7 +56,7 @@ public class ConsoleChat {
     private void exit() {
         try (PrintWriter writer = new PrintWriter(
                               new OutputStreamWriter(
-                              new FileOutputStream(logPath), "cp1251"))) {
+                              new FileOutputStream(logPath), Charset.forName(/*"WINDOWS-1251"*/"UTF-8")))) {
             for (String s : logList) {
                 writer.println(s);
             }
