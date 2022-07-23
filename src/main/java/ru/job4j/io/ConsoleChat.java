@@ -1,6 +1,7 @@
 package ru.job4j.io;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.*;
 
 public class ConsoleChat {
@@ -21,6 +22,7 @@ public class ConsoleChat {
     private final List<String> logList = new ArrayList<>();
     private boolean isStop = false;
     private boolean isExit = false;
+    private Random rand = new Random();
 
     public ConsoleChat(String path, String botAnswers) {
         this.logPath = path;
@@ -42,7 +44,7 @@ public class ConsoleChat {
 
     private void loadAnswer() {
         try (BufferedReader reader = new BufferedReader(
-                                 new FileReader(botAnswersPath))) {
+                                 new FileReader(botAnswersPath, Charset.forName("WINDOWS-1251")))) {
             while (reader.ready()) {
                 botAnswersList.add(reader.readLine());
             }
@@ -76,13 +78,13 @@ public class ConsoleChat {
     }
 
     private String getLine() {
-        var s = botAnswersList.get(new Random().nextInt(botAnswersList.size()));
+        var s = botAnswersList.get(rand.nextInt(botAnswersList.size()));
         logList.add(s);
         return s;
     }
 
     public static void main(String[] args) throws IOException {
-        ConsoleChat chat = new ConsoleChat("./data/logChat.txt", "./data/server.log");
+        ConsoleChat chat = new ConsoleChat("./data/logChat.txt", "./data/answers.txt");
         chat.run();
         chat.exit();
     }
