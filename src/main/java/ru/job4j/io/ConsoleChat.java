@@ -44,7 +44,7 @@ public class ConsoleChat {
 
     private void loadAnswer() {
         try (BufferedReader reader = new BufferedReader(
-                                 new FileReader(botAnswersPath, Charset.forName("WINDOWS-1251"/*"UTF-8"*/)))) {
+                                 new FileReader(botAnswersPath, Charset.forName(/*"WINDOWS-1251"*/"UTF-8")))) {
             while (reader.ready()) {
                 botAnswersList.add(reader.readLine());
             }
