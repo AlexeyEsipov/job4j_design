@@ -56,7 +56,7 @@ public class ConsoleChat {
     private void exit() {
         try (PrintWriter writer = new PrintWriter(
                               new OutputStreamWriter(
-                              new FileOutputStream(logPath), Charset.forName(/*"WINDOWS-1251"*/"UTF-8")))) {
+                              new FileOutputStream(logPath), Charset.forName("WINDOWS-1251"/*"UTF-8"*/)))) {
             for (String s : logList) {
                 writer.println(s);
             }
@@ -84,7 +84,7 @@ public class ConsoleChat {
     }
 
     public static void main(String[] args) throws IOException {
-        ConsoleChat chat = new ConsoleChat("./data/logChat.txt", "./data/answers.txt");
+        ConsoleChat chat = new ConsoleChat("./data/botAnswer1251.txt", "./data/botAnswer.txt");
         chat.run();
         chat.exit();
     }
