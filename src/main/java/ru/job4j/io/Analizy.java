@@ -1,37 +1,24 @@
 package ru.job4j.io;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Analizy {
-    public void unavailable(String source, String target) {
-        List<String> lines = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-        boolean workTime = true;
-        try (BufferedReader in = new BufferedReader(new FileReader(source))) {
-            for (String line = in.readLine(); line != null; line = in.readLine()) {
-                if (workTime && (line.startsWith("400") || line.startsWith("500"))) {
-                    workTime = false;
-                    sb.append(line.split(" ")[1]);
-                    sb.append(";");
-                }
-                if (!workTime && (line.startsWith("200") || line.startsWith("300"))) {
-                    workTime = true;
-                    sb.append(line.split(" ")[1]);
-                    lines.add(sb.toString());
-                    sb = new StringBuilder();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        try (PrintWriter out = new PrintWriter(new BufferedOutputStream(
-                     new FileOutputStream(target)))) {
-            for (String line : lines) {
-                out.println(line);
+    public void unavailable(String source, String target) {
+        boolean isWork = true;
+        try (BufferedReader in = new BufferedReader(new FileReader(source));
+             PrintWriter out = new PrintWriter(target)) {
+            while (in.ready()) {
+                String[] time = in.readLine().split(" ");
+                if (isWork == Integer.parseInt(time[0]) > 300) {
+                    out.append(time[1]).append(isWork ? ";" : System.lineSeparator());
+                    isWork = !isWork;
+                }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

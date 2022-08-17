@@ -1,8 +1,11 @@
 package ru.job4j.io;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
 public class ConsoleChat {
 
@@ -22,7 +25,7 @@ public class ConsoleChat {
     private final List<String> logList = new ArrayList<>();
     private boolean isStop = false;
     private boolean isExit = false;
-    private Random rand = new Random();
+    private final Random rand = new Random();
 
     public ConsoleChat(String path, String botAnswers) {
         this.logPath = path;
@@ -44,7 +47,7 @@ public class ConsoleChat {
 
     private void loadAnswer() {
         try (BufferedReader reader = new BufferedReader(
-                                 new FileReader(botAnswersPath, Charset.forName(/*"WINDOWS-1251"*/"UTF-8")))) {
+                                 new FileReader(botAnswersPath, StandardCharsets.UTF_8))) {
             while (reader.ready()) {
                 botAnswersList.add(reader.readLine());
             }
@@ -56,7 +59,7 @@ public class ConsoleChat {
     private void exit() {
         try (PrintWriter writer = new PrintWriter(
                               new OutputStreamWriter(
-                              new FileOutputStream(logPath), Charset.forName("WINDOWS-1251"/*"UTF-8"*/)))) {
+                              new FileOutputStream(logPath), StandardCharsets.UTF_8))) {
             for (String s : logList) {
                 writer.println(s);
             }
@@ -83,8 +86,8 @@ public class ConsoleChat {
         return s;
     }
 
-    public static void main(String[] args) throws IOException {
-        ConsoleChat chat = new ConsoleChat("./data/botAnswer1251.txt", "./data/botAnswer.txt");
+    public static void main(String[] args) {
+        ConsoleChat chat = new ConsoleChat("./data/botLog.txt", "./data/botAnswer1251.txt");
         chat.run();
         chat.exit();
     }
