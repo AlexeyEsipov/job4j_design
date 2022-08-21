@@ -17,6 +17,6 @@ class NameLoadTest {
         NameLoad nameLoad = new NameLoad();
         String name = "Key=value";
         nameLoad.parse(name);
-        assertThat(nameLoad.getMap()).containsEntry("Key","value");
+        assertThat(nameLoad.getMap()).containsEntry("Key", "value");
     }
 }

@@ -22,7 +22,7 @@ class SimpleConvertTest {
     @Test
     void checkMap() {
         SimpleConvert simpleConvert = new SimpleConvert();
-        Map<String, Integer> map = simpleConvert.toMap("1","2","3");
+        Map<String, Integer> map = simpleConvert.toMap("1", "2", "3");
         assertThat(map.get("1")).isEqualTo(0);
         assertThat(map.get("2")).isEqualTo(1);
         assertThat(map.get("3")).isEqualTo(2);
