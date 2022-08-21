@@ -27,3 +27,6 @@ hs_err_pid*
 
 target
 out
+*.txt
+/src/main/java/ru/job4j/io/serialization/json/Main.java
+/src/main/java/ru/job4j/generics/Probe.java
