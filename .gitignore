@@ -28,3 +28,19 @@ hs_err_pid*
 target
 out
 
+/data/botLog.txt
+/src/test/java/ru/job4j/iterator/evenTest.txt
+/src/test/java/ru/job4j/iterator/flatItTest.txt
+/src/test/java/ru/job4j/collection/ForwardLinkedTest.txt
+/src/test/java/ru/job4j/collection/ForwardRevertTest.txt
+/src/test/java/ru/job4j/collection/instrum.txt
+/src/test/java/ru/job4j/iterator/ListUtilsTest.txt
+/data/logChat11.txt
+/data/logChat12.txt
+/data/logChatu8.txt
+/src/main/java/ru/job4j/io/serialization/json/Main.java
+/src/main/java/ru/job4j/generics/Probe.java
+/src/test/java/ru/job4j/collection/SimpleQueueTest.txt
+/src/test/java/ru/job4j/collection/SimplrStackTest.txt
+/src/main/java/ru/job4j/collection/test.txt
+/src/test/java/ru/job4j/collection/testQueve.txt
