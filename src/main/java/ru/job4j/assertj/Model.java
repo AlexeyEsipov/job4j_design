@@ -1,6 +1,5 @@
 package ru.job4j.assertj;
 
-
 public class Model {
     private int top;
     private double num;
