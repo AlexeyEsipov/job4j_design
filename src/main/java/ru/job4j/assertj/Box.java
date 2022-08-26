@@ -1,6 +1,5 @@
 package ru.job4j.assertj;
 
-
 public class Box {
     private static final String UNKNOWN = "Unknown object";
     private int vertex;
