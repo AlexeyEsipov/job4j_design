@@ -37,9 +37,10 @@ public class CSVReader {
         String[][] wordsArray = new String[text.size()][indexes.size()];
         for (int row = 0; row < text.size(); row++) {
             List<String> parsedLine = new ArrayList<>();
-            var y = new Scanner(text.get(row)).useDelimiter(";");
-            while (y.hasNext()) {
-                parsedLine.add(y.next());
+            try (var y = new Scanner(text.get(row)).useDelimiter(";")) {
+                while (y.hasNext()) {
+                    parsedLine.add(y.next());
+                }
             }
             for (int column = 0; column < indexes.size(); column++) {
                 wordsArray[row][column] = parsedLine.get(indexes.get(column));
@@ -95,4 +96,5 @@ public class CSVReader {
         handle(rsl);
         writeOut(rsl);
     }
+
 }
