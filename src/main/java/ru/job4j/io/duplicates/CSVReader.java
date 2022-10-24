@@ -24,7 +24,8 @@ public class CSVReader {
                 indexes.add(fileValues.indexOf(filterValues.next()));
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException("Filter parameters or not exist or not in line with the source data");
+            throw new IllegalArgumentException(
+                    "Filter parameters or not exist or not in line with the source data");
         }
 
         try (var lines = new Scanner(file).useDelimiter(System.lineSeparator())) {
@@ -71,10 +72,12 @@ public class CSVReader {
 
     public static void checkArgs(String[] args) {
         if (args.length != 4) {
-            throw new IllegalArgumentException("In the root folder has no four arguments. Usage ROOT_FOLDER");
+            throw new IllegalArgumentException(
+                    "In the root folder has no four arguments. Usage ROOT_FOLDER");
         }
         if (!args[0].endsWith(".csv")) {
-            throw new IllegalArgumentException("The paths directory has wrong extension or does not exist");
+            throw new IllegalArgumentException(
+                    "The paths directory has wrong extension or does not exist");
         }
         if (args[1].length() > 12) {
             throw new IllegalArgumentException("The delimiter should be one type");
