@@ -12,7 +12,7 @@ $$
 BEGIN
     update products
     set price = price + price * 0.2
-    where id = (select id from inserted);
+    where id in (select id from inserted);
     return new;
 END;
 $$
@@ -28,6 +28,8 @@ insert into products (name, producer, price)
               values ('milk', 'Milk farm', 15),
                      ('bread', 'Bread farm', 9),
                      ('meat', 'Meat farm', 40);
+
+select * from products;
 
 create or replace function tax_row()
     returns trigger as
@@ -46,6 +48,8 @@ execute procedure tax_row();
 
 insert into products (name, producer, price)
               values ('water', 'Water farm', 5);
+
+select * from products;
 
 create table history_of_price (
     id serial primary key,
@@ -70,7 +74,11 @@ create trigger insert_products
     for each row
 execute procedure insert_product_date();
 
+select * from products;
+
 insert into products (name, producer, price)
               values ('coffe', 'Coffee farm', 49);
+
+select * from products;
 
 select * from history_of_price;
