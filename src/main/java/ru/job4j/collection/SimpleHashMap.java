@@ -13,6 +13,7 @@ public class SimpleHashMap<K, V> implements SimpleMap<K, V> {
     private int count = 0;
 
     private int modCount = 0;
+    @SuppressWarnings("unchecked")
     private MapEntry<K, V>[] table = new MapEntry[capacity];
 
     @Override
@@ -20,7 +21,7 @@ public class SimpleHashMap<K, V> implements SimpleMap<K, V> {
         if (count >= capacity * LOAD_FACTOR) {
             expand();
         }
-        int index = indexFor(hash(key));
+        int index = getIndex(key);
         boolean rsl = Objects.isNull(table[index]);
         if (rsl) {
             table[index] = new MapEntry<>(key, value);
@@ -30,25 +31,25 @@ public class SimpleHashMap<K, V> implements SimpleMap<K, V> {
         return rsl;
     }
 
-    private int hash(K key) {
-        int result = 0;
-        if (!Objects.isNull(key)) {
-            int h = key.hashCode();
-            result = h ^ (h >>> 16);
-        }
-        return result;
+    private int getIndex(K key) {
+        return indexFor(hash(Objects.hashCode(key)));
+    }
+
+    private int hash(int hashCode) {
+        return hashCode ^ (hashCode >>> 16);
     }
 
     private int indexFor(int hash) {
         return hash & (capacity - 1);
     }
 
+    @SuppressWarnings("unchecked")
     private void expand() {
         capacity = capacity * 2;
         MapEntry<K, V>[] tempTable = new MapEntry[capacity];
         for (MapEntry<K, V> entry : table) {
-            if (!Objects.isNull(entry)) {
-                tempTable[indexFor(hash(entry.key))] = entry;
+            if (Objects.nonNull(entry)) {
+                tempTable[getIndex(entry.key)] = entry;
             }
         }
         modCount++;
@@ -58,41 +59,28 @@ public class SimpleHashMap<K, V> implements SimpleMap<K, V> {
     @Override
     public V get(K key) {
         V result = null;
-        int index = indexFor(hash(key));
-        boolean isCellNotNull = !Objects.isNull(table[index]);
-        if (isCellNotNull) {
-            K keyTable = table[index].key;
-            if (Objects.isNull(keyTable) && Objects.isNull(key)) {
-                result = table[index].value;
-            }
-            if (!Objects.isNull(keyTable) && !Objects.isNull(key)
-                    && table[index].key.hashCode() == key.hashCode()
-                    && table[index].key.equals(key)) {
-                result = table[index].value;
-            }
-
+        int index = getIndex(key);
+        if (isKeyEqualsKey(key, index)) {
+            result = table[index].value;
         }
         return result;
+    }
+
+    private boolean isKeyEqualsKey(K key, int index) {
+        return Objects.nonNull(table[index])
+                && Objects.hashCode(key) == Objects.hashCode(table[index].key)
+                && Objects.equals(key, table[index].key);
     }
 
     @Override
     public boolean remove(K key) {
         boolean result = false;
-        int index = indexFor(hash(key));
-        boolean isCellNotNull = !Objects.isNull(table[index]);
-        if (isCellNotNull) {
-            K keyTable = table[index].key;
-            if ((Objects.isNull(keyTable) && Objects.isNull(key))
-                    || (!Objects.isNull(keyTable)
-                    && !Objects.isNull(key)
-                    && (table[index].key.hashCode() == key.hashCode()
-                    && table[index].key.equals(key)))) {
-                table[index] = null;
-                result = true;
-                count--;
-                modCount++;
-            }
-
+        int index = getIndex(key);
+        if (isKeyEqualsKey(key, index)) {
+            table[index] = null;
+            result = true;
+            count--;
+            modCount++;
         }
         return result;
     }
@@ -124,13 +112,6 @@ public class SimpleHashMap<K, V> implements SimpleMap<K, V> {
         };
     }
 
-    private static class MapEntry<K, V> {
-        private K key;
-        private V value;
-
-        public MapEntry(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
+    private record MapEntry<K, V>(K key, V value) {
     }
 }
