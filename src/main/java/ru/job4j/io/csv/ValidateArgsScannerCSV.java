@@ -8,7 +8,7 @@ public class ValidateArgsScannerCSV {
     private static Map<String, String> values = new HashMap<>();
 
     static void parseArgs(String[] args) {
-        if (args.length < 7) {
+        if (args.length != 4) {
             throw new IllegalArgumentException("Недостаточно аргументов. "
                     + "Программа должна собираться в jar и запускаться через "
                     + "java -jar csvReader.jar -path=file.csv -delimiter=; "

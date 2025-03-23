@@ -57,9 +57,11 @@ public class ConsoleChat {
     }
 
     private void exit() {
-        try (PrintWriter writer = new PrintWriter(
+        /*try (PrintWriter writer = new PrintWriter(
                               new OutputStreamWriter(
-                              new FileOutputStream(logPath), StandardCharsets.UTF_8))) {
+                              new FileOutputStream(logPath), StandardCharsets.UTF_8))) {*/
+        try (PrintWriter writer = new PrintWriter(
+                logPath, StandardCharsets.UTF_8)) {
             for (String s : logList) {
                 writer.println(s);
             }
@@ -87,7 +89,7 @@ public class ConsoleChat {
     }
 
     public static void main(String[] args) {
-        ConsoleChat chat = new ConsoleChat("./data/botLog.txt", "./data/botAnswer1251.txt");
+        ConsoleChat chat = new ConsoleChat("./dat/botLog.txt", "botAnswer.txt");
         chat.run();
         chat.exit();
     }

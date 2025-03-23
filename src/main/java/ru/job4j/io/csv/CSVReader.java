@@ -3,6 +3,7 @@ package ru.job4j.io.csv;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -65,11 +66,16 @@ public class CSVReader {
     }
 
     public void outReport() throws IOException {
-        if (Objects.equals(argsMap.get("out"), "stdout")) {
+        String dest = argsMap.get("out");
+        try(PrintStream out = "stdout".equals(dest) ? System.out : new PrintStream(dest)) {
+            result.forEach(out::println);
+        }
+
+        /*if (Objects.equals(argsMap.get("out"), "stdout")) {
             System.out.print(result);
         } else {
             Files.write(destination, result, StandardCharsets.UTF_8);
-        }
+        }*/
     }
 
     public static void main(String[] args) throws IOException {

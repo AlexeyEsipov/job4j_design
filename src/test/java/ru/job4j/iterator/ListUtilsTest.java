@@ -58,6 +58,7 @@ class ListUtilsTest {
         List<Integer> input = new ArrayList<>(Arrays.asList(1, 3, 4, 1, 5));
         List<Integer> elements = new ArrayList<>(Arrays.asList(0, 1, 4));
         ListUtils.removeAll(input, elements);
-        assertThat(input).hasSize(2).containsSequence(3, 5);
+        assertThat(input).hasSize(2).containsSequence(3, 5)
+                .containsExactly(3, 5);
     }
 }

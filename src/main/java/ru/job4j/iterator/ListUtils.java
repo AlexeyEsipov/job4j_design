@@ -33,6 +33,10 @@ public class ListUtils {
     }
 
     public static <T> List<T> removeAll(List<T> list, List<T> elements) {
+//        Boolean b = Boolean.getBoolean("true");
+//        System.out.println(b);
+//        System.out.println(list.contains(b));
+
         return removeIf(list, elements::contains);
     }
 }

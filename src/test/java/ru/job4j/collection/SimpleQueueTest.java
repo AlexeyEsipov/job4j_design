@@ -52,8 +52,15 @@ class SimpleQueueTest {
     @Test
     void whenPushPushPollAndPush() {
         queue.push(2);
-        queue.poll();
+        int a = queue.poll();
+        System.out.println("a = " + a);
         queue.push(3);
-        assertThat(queue.poll()).isEqualTo(2);
+        queue.push(4);
+        a = queue.poll();
+        a = queue.poll();
+        queue.push(3);
+        System.out.println("element" + queue.poll());
+
+        assertThat(queue.poll()).isEqualTo(4);
     }
 }
